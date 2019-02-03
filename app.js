@@ -64,10 +64,15 @@ app.get("/admin", (req, res) =>{
 	res.send("will be implemented later");
 });
 
-//show all teacher route 
-//index
+ 
+//index : show all teachers
 app.get("/teacher", (req, res) => {
 	res.render("teacher", {teacher : teacher});
+});
+
+//new : add new teacher
+app.get("/teacher/new",(req, res)=> {
+	res.render("new");
 });
 
 //show
