@@ -2,7 +2,8 @@ var express 	= require("express")
 	app			= express(),
 	bodyParser 	= require("body-parser")
 	mongoose 	= require("mongoose")
-	seedDB		= require("./seed");
+	seedDB		= require("./seed")
+	Teacher  	= require("./models/teacher");
 
 
 
@@ -43,14 +44,20 @@ app.get("/admin", (req, res) =>{
 });
 
 //user route
-app.get("/admin", (req, res) =>{
+app.get("/user", (req, res) =>{
 	res.send("will be implemented later");
 });
 
  
 //index : show all teachers
 app.get("/teacher", (req, res) => {
-	res.render("teacher", {teacher : teacher});
+	Teacher.find({}).exec((err, allTeachers)=>{
+	if(err){
+		console.log(err);
+	}else{
+		res.render("teacher",{teacher : allTeachers});
+	}		
+	})
 });
 
 //new : add new teacher
