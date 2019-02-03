@@ -1,53 +1,36 @@
 var express 	= require("express")
 	app			= express(),
-	bodyParser 	= require("body-parser");	
-
-var teacher =[
-	{
-		name : "Himanish",
-		// subject : [
-		// {
-		// 	subject  : "Graph Theory",
-		// 	subCode  : "GP101",
-		// 	semester : 4
-		// },
-		// {
-		// 	subject  : "DBMS",
-		// 	subCode  : "DM101",
-		// 	semester : 5 
-		// }
-
-		// ]
-		// branch : "cse",
-		image  : "/images/default.png"
-
-
-	},
-	{
-	name : "Diganta",
-	// subject : [
-	// {
-	// 	subject  : "DSA",
-	// 	subCode  : "DB102",
-	// 	semester : 4
-	// },
-	// {
-	// 	subject  : "TOC",
-	// 	subCode  : "TC101",
-	// 	semester : 5 
-	// }
-
-	// ]
-	// branch : "cse",
-	image  : "/images/default.png"
-	}
-];
+	bodyParser 	= require("body-parser")
+	mongoose 	= require("mongoose")
+	seedDB		= require("./seed");
 
 
 
+
+
+
+mongoose.connect("mongodb://localhost/feedBack", { useNewUrlParser: true });
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+
+app.use(bodyParser.urlencoded({extended:true}));
 
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
+
+
+
+
+//seed database
+seedDB();
+
+
+
+
+
+
+
+
 
 //main route
 app.get("/", (req, res) =>{
@@ -76,6 +59,9 @@ app.get("/teacher/new",(req, res)=> {
 });
 
 //show
+app.post("/teacher",(req, res)=> {
+	res.send("done");
+});
 
 
 
