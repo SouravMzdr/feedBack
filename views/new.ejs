@@ -1,8 +1,94 @@
-<form action="teacher/new" method="POST">
-	
-	<input type="text" name="teacher[name]">
 
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add Teacher</title>
+	<script type="text/javascript" src="/js/lib/jQuery.js"></script>
 
+</head>
+<body>
 
+<form action="/teacher/" method="POST">
+	<div>
+		<input type="text" name="teacher[name]" placeholder="name">
+	</div>
+	<div>
+		<input type="text" name="teacher[image]" placeholder="image" value="/images/default.png" disabled="true">
+	</div>
+	<div>
+		<select name="teacher[branch]">
+			<option>Select Branch</option>
+			<option value="cse">CSE</option>
+			<option value="mechanical">Mechanical</option>
+			<option value="civil">Civil</option>
+			<option value="instrumentation">Instrumentation</option>
+			<option value="electrical">Electrical</option>
+			<option value="maths">Maths</option>
+			<option value="physics">Physics</option>
+			<option value="chemistry">Chemistry</option>
+			<option value="humanities">Humanities</option>
+			<option value="mca">MCA</option>
+		</select>
+	</div>
+
+	<%var i = 0%>
+	<div >
+		<input type="text" name="subject[subject<%=i%>[subjectName]]" placeholder="subject" onkeydown="upperCaseF(this)">
+		<input type="text" name="subject[subject<%=i%>[subjectCode]]" placeholder="subject code" onkeydown="upperCaseF(this)">
+		<select name="subject[subject<%=i%>[semester]]">
+			<option>Select Semester</option>
+			<option value="1">1st Semester</option>
+			<option value="2">2nd Semester</option>
+			<option value="3">3rd Semester</option>
+			<option value="4">4th Semester</option>
+			<option value="5">5th Semester</option>
+			<option value="6">6th Semester</option>
+			<option value="7">7th Semester</option>
+			<option value="8">8th Semester</option>
+		</select>
+	</div>
+	<div class="addButton" >
+		<input type="button"  value="Add subject">
+	</div>
+	<div>
+		<input type="submit" value="submit">
+	</div>
 </form>
+
+
+<script type="text/javascript">
+	var p = <%=i%>;
+	var postfix="num";
+
+	$("form").on("click", ".addButton", function(event){
+		p++;
+		$(".addButton").before("<div> ");
+		$(".addButton").prev().append("<input type=\"text\" name=\"subject[subject"+p+"[subjectName]]\" placeholder=\"subject\" onkeydown=\"upperCaseF(this)\"> ");
+		$(".addButton").prev().append("<input type=\"text\" name=\"subject[subject"+p+"[subjectCode]]\" placeholder=\"subject code\" onkeydown=\"upperCaseF(this)\"> ");
+
+		$(".addButton").prev().append("<select name=\"subject[subject"+p+"[semester]]\">");
+		$(".addButton").prev().children("select").append("<option>Select Semester</option>");
+		
+		for(var i=1; i<=8; i++){
+			
+			if(i===1) postfix = "st";
+			else if(i===2) postfix = "nd";
+			else if(i===3) postfix = "rd";
+			else postfix = "th";
+
+			$(".addButton").prev().children("select").append("<option value=\""+i+"\">"+i+postfix+" Semester</option>");
+		}
+	});
+
+	function upperCaseF(a){
+   		setTimeout(function(){
+        	a.value = a.value.toUpperCase();
+    	}, 1);
+   	}
+
+</script>
+
+	
+</body>
+</html>
 	
