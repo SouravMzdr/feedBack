@@ -1,9 +1,11 @@
 var express 	= require("express")
 	app			= express(),
-	bodyParser 	= require("body-parser")
-	mongoose 	= require("mongoose")
-	seedDB		= require("./seed")
-	Teacher  	= require("./models/teacher");
+	bodyParser 	= require("body-parser"),
+	mongoose 	= require("mongoose"),
+	seedDB		= require("./seed"),
+	Teacher  	= require("./models/teacher"),
+	Subject 	= require("./models/subject"),
+	async		= require("async");
 
 
 
@@ -65,9 +67,51 @@ app.get("/teacher/new",(req, res)=> {
 	res.render("new");
 });
 
-//show
+
+ // var cur = new Promise((resolve, reject)=>{
+
+// })
+
+
+//add new teacher to database
 app.post("/teacher",(req, res)=> {
-	res.send("done");
+
+	var teacher = req.body.teacher;
+	var subject = req.body.subject;
+
+	Teacher.create(teacher, function(err, teacher){
+		if(err){
+			
+		}else{
+			Object.entries(subject).forEach(([key, value]) =>{
+				Subject.create(value, function(err, insertingSubject){
+					if(err){
+						Subject.findOne({subjectCode : value.subjectCode},function(err, sub){
+							if(err){
+								console.log(err);
+							}else{
+								teacher.subjects.push(sub);	
+							}
+						});
+					}
+					else{
+						teacher.subjects.push(insertingSubject);
+					}	
+					
+				});
+
+			});
+			//Solved Parallel document save of the same document
+			setTimeout(()=>{
+				 	teacher.save();
+				},1000);
+
+		}
+
+	});
+	
+	res.send("Working");
+	// Teacher.create()
 });
 
 

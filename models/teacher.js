@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 
 var teacherSchema = new mongoose.Schema({
-	name: String,
+	name: {type: String, unique: true},
 	image: String,
 	subjects:[
 		{
@@ -11,6 +11,7 @@ var teacherSchema = new mongoose.Schema({
 
 	],
 	branch: String
+
 });
 
 module.exports = mongoose.model("Teacher", teacherSchema);

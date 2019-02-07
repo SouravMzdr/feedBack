@@ -10,14 +10,14 @@
 
 <form action="/teacher/" method="POST">
 	<div>
-		<input type="text" name="teacher[name]" placeholder="name">
+		<input type="text" name="teacher[name]" placeholder="name" required="true">
 	</div>
 	<div>
-		<input type="text" name="teacher[image]" placeholder="image" value="/images/default.png" disabled="true">
+		<input type="text" name="teacher[image]" placeholder="image" value="/images/default.png" readonly="true">
 	</div>
 	<div>
-		<select name="teacher[branch]">
-			<option>Select Branch</option>
+		<select name="teacher[branch]" required="true">
+			<option value="">Select Branch</option>
 			<option value="cse">CSE</option>
 			<option value="mechanical">Mechanical</option>
 			<option value="civil">Civil</option>
@@ -33,10 +33,10 @@
 
 	<%var i = 0%>
 	<div >
-		<input type="text" name="subject[subject<%=i%>[subjectName]]" placeholder="subject" onkeydown="upperCaseF(this)">
-		<input type="text" name="subject[subject<%=i%>[subjectCode]]" placeholder="subject code" onkeydown="upperCaseF(this)">
-		<select name="subject[subject<%=i%>[semester]]">
-			<option>Select Semester</option>
+		<input type="text" name="subject[subject<%=i%>][subjectName]" placeholder="subject" onkeydown="upperCaseF(this)" required="true">
+		<input type="text" name="subject[subject<%=i%>][subjectCode]" placeholder="subject code" onkeydown="upperCaseF(this)" required="true">
+		<select name="subject[subject<%=i%>][semester]" required="true">
+			<option value="">Select Semester</option>
 			<option value="1">1st Semester</option>
 			<option value="2">2nd Semester</option>
 			<option value="3">3rd Semester</option>
@@ -63,11 +63,11 @@
 	$("form").on("click", ".addButton", function(event){
 		p++;
 		$(".addButton").before("<div> ");
-		$(".addButton").prev().append("<input type=\"text\" name=\"subject[subject"+p+"[subjectName]]\" placeholder=\"subject\" onkeydown=\"upperCaseF(this)\"> ");
-		$(".addButton").prev().append("<input type=\"text\" name=\"subject[subject"+p+"[subjectCode]]\" placeholder=\"subject code\" onkeydown=\"upperCaseF(this)\"> ");
+		$(".addButton").prev().append("<input type=\"text\" name=\"subject[subject"+p+"][subjectName]\" placeholder=\"subject\" onkeydown=\"upperCaseF(this)\" required=\"true\"> ");
+		$(".addButton").prev().append("<input type=\"text\" name=\"subject[subject"+p+"][subjectCode]\" placeholder=\"subject code\" onkeydown=\"upperCaseF(this)\" required=\"true\" >");
 
-		$(".addButton").prev().append("<select name=\"subject[subject"+p+"[semester]]\">");
-		$(".addButton").prev().children("select").append("<option>Select Semester</option>");
+		$(".addButton").prev().append("<select name=\"subject[subject"+p+"][semester]\" required=\"true\" >");
+		$(".addButton").prev().children("select").append("<option value=\"\">Select Semester</option>");
 		
 		for(var i=1; i<=8; i++){
 			
