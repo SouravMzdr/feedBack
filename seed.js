@@ -40,7 +40,7 @@ var	mongoose	= require("mongoose"),
 var teacher =[
 	{
 		name : "Himanish",
-		branch : "cse",
+		branch : "CSE",
 		image  : "/images/default.png"
 
 
@@ -48,7 +48,7 @@ var teacher =[
 	{
 	name : "Diganta",
 	
-	branch : "cse",
+	branch : "CSE",
 	image  : "/images/default.png"
 	}
 ]

@@ -1,15 +1,12 @@
-var express 	= require("express")
-	app			= express(),
-	bodyParser 	= require("body-parser"),
-	mongoose 	= require("mongoose"),
-	seedDB		= require("./seed"),
-	Teacher  	= require("./models/teacher"),
-	Subject 	= require("./models/subject"),
-	async		= require("async");
-
-
-
-
+var express 		= require("express")
+	app				= express(),
+	bodyParser 		= require("body-parser"),
+	mongoose 		= require("mongoose"),
+	seedDB			= require("./seed"),
+	Teacher  		= require("./models/teacher"),
+	Subject 		= require("./models/subject"),
+	async			= require("async")
+	methodOverride  = require("method-override");
 
 
 mongoose.connect("mongodb://localhost/feedBack", { useNewUrlParser: true });
@@ -20,6 +17,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
+app.use(methodOverride("_method"));
 
 
 
@@ -53,7 +51,7 @@ app.get("/user", (req, res) =>{
  
 //index : show all teachers
 app.get("/teacher", (req, res) => {
-	Teacher.find({}).exec((err, allTeachers)=>{
+	Teacher.find({}).populate("subjects").exec((err, allTeachers)=>{
 	if(err){
 		console.log(err);
 	}else{
@@ -62,15 +60,11 @@ app.get("/teacher", (req, res) => {
 	})
 });
 
-//new : add new teacher
+//new : add new teacher form
 app.get("/teacher/new",(req, res)=> {
 	res.render("new");
 });
 
-
- // var cur = new Promise((resolve, reject)=>{
-
-// })
 
 
 //add new teacher to database
@@ -104,14 +98,38 @@ app.post("/teacher",(req, res)=> {
 			//Solved Parallel document save of the same document
 			setTimeout(()=>{
 				 	teacher.save();
-				},1000);
+					res.redirect("/teacher");	
+			},1000);
 
 		}
 
 	});
+});
+
+//delete all teacher
+app.delete("/teacher/delete", function(req, res){
 	
-	res.send("Working");
-	// Teacher.create()
+	Teacher.deleteMany({}, function(err){
+		if(err)
+			console.log(err);
+		else{
+			console.log("removed");
+			res.redirect("back");
+		}
+		 
+	});
+
+});
+
+
+app.get("/teacher/:teacherId/edit", (req, res)=>{
+	Teacher.findOne({_id : req.params.teacherId}).populate("subjects").exec((err, foundTeacher)=>{
+		if(err)
+			console.log(err);
+		else{
+			res.render("edit",{teacher : foundTeacher});				
+		}
+	});
 });
 
 

@@ -1,15 +1,47 @@
 <%include ./partials/header.ejs%>
 
 <h1>Teacher's Page</h1>
-
-<a href="/teacher/new">Add new teacher</a>
+<div>
+	<a href="/teacher/new">Add new teacher</a>
+	<form id="delete" action="/teacher/delete?_method=DELETE" method="POST">
+		<input value="Delete All Teacher" class="btn btn-xs btn-danger" onClick="confirmation()">
+	</form>
+</div>
 <ul>
 	<% teacher.forEach((teacher)=>{%>
 		<li>
 		<img src="<%=teacher.image%>"><br>
 		<a href="#"><h1><%=teacher.name%></h1></a>
+		<h3><%=teacher.branch %></h3>
+		<h4>Teaches</h4>
+		<%teacher.subjects.forEach((subject)=>{%>
+			<li><%=subject.subjectName%> - <%=subject.semester%> sem</li>
+		<%}); %>
+		
+		<div>
+			<a class="btn btn-xs btn-warning" 
+			href="/teacher/<%=teacher._id %>/edit">
+				Edit
+			</a>
+			<!-- <form id="delete-form" action="/campgrounds/</comments/?_method=DELETE" method="POST">
+				<button class="btn btn-xs btn-danger">Delete</button>
+			</form> -->
+		</div>
 		</li>
 	<%})%>
 </ul>
+
+<script type="text/javascript">
+	function confirmation(){
+		if(confirm("Are you sure You want to delete")){
+			document.getElementById("delete").submit();
+			return;
+		}else{
+			return;
+		}
+	}
+</script>
+
+<%include ./partials/footer.ejs%>
 
 
