@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<form action="/teacher/" method="POST">
+<form action="/teacher/<%=teacher._id%>?_method=PUT" method="POST">
 	<div>
 		<input type="text" name="teacher[name]" placeholder="name" required="true" value="<%=teacher.name%>">
 	</div>
@@ -35,8 +35,8 @@
 
 	<% teacher.subjects.forEach((subject)=>{%>
 		<div >
-			<input type="text" name="subject[subject<%=i%>][subjectName]" placeholder="subject" onkeydown="upperCaseF(this)" required="true" value="<%=subject.subjectName%>">
-			<input type="text" name="subject[subject<%=i%>][subjectCode]" placeholder="subject code" onkeydown="upperCaseF(this)" required="true" value="<%=subject.subjectCode%>">
+			<input type="text" class="cap" name="subject[subject<%=i%>][subjectName]" placeholder="subject" onkeydown="upperCaseF(this)" required="true" value="<%=subject.subjectName%>">
+			<input type="text" class="cap" name="subject[subject<%=i%>][subjectCode]" placeholder="subject code" onkeydown="upperCaseF(this)" required="true" value="<%=subject.subjectCode%>">
 			<select name="subject[subject<%=i++%>][semester]" required="true">
 				<option value="">Select Semester</option>
 
@@ -105,10 +105,11 @@
         	a.value = a.value.toUpperCase();
     	}, 1);
    	}
+   	$('.cap').val (function () {
+    	return this.value.toUpperCase();
+	});
 
-	// $(".deleteButton").click(function(){
-	// 	$(this).parent().remove();
-	// });  	
+   	 	
    	$("form").on("click", ".deleteButton", function(event){
    		$(this).parent().remove();
    		event.stopPropagation();

@@ -64,10 +64,10 @@
 		p++;
 		$(".addButton").before("<div> ");
 		$(".addButton").prev().append("<input type=\"text\" name=\"subject[subject"+p+"][subjectName]\" placeholder=\"subject\" onkeydown=\"upperCaseF(this)\" required=\"true\"> ");
-		$(".addButton").prev().append("<input type=\"text\" name=\"subject[subject"+p+"][subjectCode]\" placeholder=\"subject code\" onkeydown=\"upperCaseF(this)\" required=\"true\" >");
+		$(".addButton").prev().append("<input type=\"text\" name=\"subject[subject"+p+"][subjectCode]\" placeholder=\"subject code\" onkeydown=\"upperCaseF(this)\" required=\"true\" > ");
 
-		$(".addButton").prev().append("<select name=\"subject[subject"+p+"][semester]\" required=\"true\" >");
-		$(".addButton").prev().children("select").append("<option value=\"\">Select Semester</option>");
+		$(".addButton").prev().append(" <select name=\"subject[subject"+p+"][semester]\" required=\"true\" > ");
+		$(".addButton").prev().children("select").append("<option value=\"\">Select Semester</option> ");
 		
 		for(var i=1; i<=8; i++){
 			
@@ -78,6 +78,7 @@
 
 			$(".addButton").prev().children("select").append("<option value=\""+i+"\">"+i+postfix+" Semester</option>");
 		}
+		$(".addButton").prev().append(" <input class=\"deleteButton\" type=\"button\" value=\"Delete\" >");
 	});
 
 	function upperCaseF(a){
@@ -85,6 +86,11 @@
         	a.value = a.value.toUpperCase();
     	}, 1);
    	}
+
+   	$("form").on("click", ".deleteButton", function(event){
+   		$(this).parent().remove();
+   		event.stopPropagation();
+   	});
 
 </script>
 

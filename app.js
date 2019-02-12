@@ -8,6 +8,8 @@ var express 		= require("express")
 	async			= require("async")
 	methodOverride  = require("method-override");
 
+var Promise = require("mongoose").Promise;
+
 
 mongoose.connect("mongodb://localhost/feedBack", { useNewUrlParser: true });
 mongoose.set('useFindAndModify', false);
@@ -65,8 +67,6 @@ app.get("/teacher/new",(req, res)=> {
 	res.render("new");
 });
 
-
-
 //add new teacher to database
 app.post("/teacher",(req, res)=> {
 
@@ -77,6 +77,7 @@ app.post("/teacher",(req, res)=> {
 		if(err){
 			
 		}else{
+
 			Object.entries(subject).forEach(([key, value]) =>{
 				Subject.create(value, function(err, insertingSubject){
 					if(err){
@@ -100,7 +101,7 @@ app.post("/teacher",(req, res)=> {
 				 	teacher.save();
 					res.redirect("/teacher");	
 			},1000);
-
+			
 		}
 
 	});
@@ -121,13 +122,60 @@ app.delete("/teacher/delete", function(req, res){
 
 });
 
-
+//teacher edit route
 app.get("/teacher/:teacherId/edit", (req, res)=>{
 	Teacher.findOne({_id : req.params.teacherId}).populate("subjects").exec((err, foundTeacher)=>{
 		if(err)
 			console.log(err);
 		else{
 			res.render("edit",{teacher : foundTeacher});				
+		}
+	});
+});
+
+//edit teacher
+app.put("/teacher/:teacherId/", (req, res)=>{
+	var subject = req.body.subject;
+	Teacher.findByIdAndUpdate(req.params.teacherId, req.body.teacher, function(err, teacher){
+		if(err){
+			res.redirect("back");
+		}else{
+
+			Object.entries(subject).forEach(([key, value]) =>{
+				Subject.create(value, function(err, insertingSubject){
+					if(err){
+						Subject.findOne({subjectCode : value.subjectCode},function(err, sub){
+							if(err){
+								console.log(err);
+							}else{
+								teacher.subjects.push(sub);	
+							}
+						});
+					}
+					else{
+						teacher.subjects.push(insertingSubject);
+					}	
+					
+				});
+
+			});
+			//Solved Parallel document save of the same document
+			setTimeout(()=>{
+				 	teacher.save();
+					res.redirect("/teacher/");	
+			},1000);
+		}
+	});
+});
+
+
+//delete teacher
+app.delete("/teacher/:teacherId/",function(req, res){
+	Teacher.findByIdAndRemove(req.params.teacherId, function(err){
+		if(err){
+			res.redirect("back");
+		}else{
+			res.redirect("/teacher/");
 		}
 	});
 });

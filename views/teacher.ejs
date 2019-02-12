@@ -2,10 +2,12 @@
 
 <h1>Teacher's Page</h1>
 <div>
-	<a href="/teacher/new">Add new teacher</a>
-	<form id="delete" action="/teacher/delete?_method=DELETE" method="POST">
-		<input value="Delete All Teacher" class="btn btn-xs btn-danger" onClick="confirmation()">
-	</form>
+	<a href="/teacher/new" class="btn btn-xs btn-primary">Add new teacher</a>
+	<% if(Object.keys(teacher).length>0){%>
+		<form id="delete" action="/teacher/delete?_method=DELETE" method="POST">
+			<input value="Delete All Teacher" class="btn btn-xs btn-danger" onClick="confirmation()">
+		</form>
+	<%}%>
 </div>
 <ul>
 	<% teacher.forEach((teacher)=>{%>
@@ -23,9 +25,9 @@
 			href="/teacher/<%=teacher._id %>/edit">
 				Edit
 			</a>
-			<!-- <form id="delete-form" action="/campgrounds/</comments/?_method=DELETE" method="POST">
-				<button class="btn btn-xs btn-danger">Delete</button>
-			</form> -->
+			<form id="delete-form" action="/teacher/<%=teacher._id%>?_method=DELETE" method="POST">
+				<button id="del" class="btn btn-xs btn-danger">Delete</button>
+			</form>
 		</div>
 		</li>
 	<%})%>
@@ -39,7 +41,7 @@
 		}else{
 			return;
 		}
-	}
+
 </script>
 
 <%include ./partials/footer.ejs%>
