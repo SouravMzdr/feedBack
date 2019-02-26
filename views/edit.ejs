@@ -1,69 +1,80 @@
+<%include ./partials/header.ejs%>
 
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Edit Teacher</title>
-	<script type="text/javascript" src="/js/lib/jQuery.js"></script>
 
-</head>
-<body>
+<div class="container">
+	<div class="row">
+		<h1 style="text-align: center">Add New Teacher</h1>
+		<div style="width: 50%; margin: 25px auto">
 
-<form action="/teacher/<%=teacher._id%>?_method=PUT" method="POST">
-	<div>
-		<input type="text" name="teacher[name]" placeholder="name" required="true" value="<%=teacher.name%>">
-	</div>
-	<div>
-		<input type="text" name="teacher[image]" placeholder="image" value="/images/default.png" value="<%=teacher.image%>" readonly="true">
-	</div>
-	<div>
-		<select id="branch" name="teacher[branch]" required="true">
-			<option value="">Select Branch</option>
-			<option value="CSE">CSE</option>
-			<option value="MECHANICAL">Mechanical</option>
-			<option value="CIVIL">Civil</option>
-			<option value="INSTRUMENTATION">Instrumentation</option>
-			<option value="ELECTRICAL">Electrical</option>
-			<option value="MATHS">Maths</option>
-			<option value="PHYSICS">Physics</option>
-			<option value="CHEMISTRY">Chemistry</option>
-			<option value="HUMANITIES">Humanities</option>
-			<option value="MCA">MCA</option>
-		</select>
-	</div>
+			
+			<form action="/teacher/<%=teacher._id%>?_method=PUT" method="POST">
+				<div class="form-group">
+					<input class="form-control" type="text" name="teacher[name]" placeholder="name" required="true" value="<%=teacher.name%>">
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="text" name="teacher[image]" placeholder="image" value="/images/default.png" value="<%=teacher.image%>" readonly="true">
+				</div>
+				<div class="form-group">
+					<select class="form-control" id="branch" name="teacher[branch]" required="true">
+						<option value="">Select Branch</option>
+						<option value="CSE">CSE</option>
+						<option value="MECHANICAL">Mechanical</option>
+						<option value="CIVIL">Civil</option>
+						<option value="INSTRUMENTATION">Instrumentation</option>
+						<option value="ELECTRICAL">Electrical</option>
+						<option value="MATHS">Maths</option>
+						<option value="PHYSICS">Physics</option>
+						<option value="CHEMISTRY">Chemistry</option>
+						<option value="HUMANITIES">Humanities</option>
+						<option value="MCA">MCA</option>
+					</select>
+				</div>
 
-	<%var i=0%>
+				<%var i=0%>
 
-	<% teacher.subjects.forEach((subject)=>{%>
-		<div >
-			<input type="text" class="cap" name="subject[subject<%=i%>][subjectName]" placeholder="subject" onkeydown="upperCaseF(this)" required="true" value="<%=subject.subjectName%>">
-			<input type="text" class="cap" name="subject[subject<%=i%>][subjectCode]" placeholder="subject code" onkeydown="upperCaseF(this)" required="true" value="<%=subject.subjectCode%>">
-			<select name="subject[subject<%=i++%>][semester]" required="true">
-				<option value="">Select Semester</option>
+				<% teacher.subjects.forEach((subject)=>{%>
+					<div class="form-inline">
+						<div class="form-group">
+							<input type="text" class="cap form-control" name="subject[subject<%=i%>][subjectName]" placeholder="subject" onkeydown="upperCaseF(this)" required="true" value="<%=subject.subjectName%>">
+						</div>
+						<div class="form-group">
+							<input type="text" class="cap form-control" name="subject[subject<%=i%>][subjectCode]" placeholder="subject code" onkeydown="upperCaseF(this)" required="true" value="<%=subject.subjectCode%>">
+						</div>
+						<div class="form-group form-group-sm">
+							<select class="form-control" name="subject[subject<%=i++%>][semester]" required="true">
+								<option value="">Select Semester</option>
 
-				<% var postfix;
-					for(var j=1; j<=8; j++){
-						if(j===1) postfix = "st";
-						else if(j===2) postfix = "nd";
-						else if(j===3) postfix = "rd";
-						else postfix = "th"; 
-						if( j===Number(subject.semester)){%>
-							<option selected="selected" value="<%=j%>"><%=j%><%=postfix%> Semester</option>
-						<% } else {%>
-							<option value="<%=j%>"><%=j%><%=postfix%> Semester</option>
+								<% var postfix;
+									for(var j=1; j<=8; j++){
+										if(j===1) postfix = "st";
+										else if(j===2) postfix = "nd";
+										else if(j===3) postfix = "rd";
+										else postfix = "th"; 
+										if( j===Number(subject.semester)){%>
+											<option selected="selected" value="<%=j%>"><%=j%><%=postfix%> Semester</option>
+										<% } else {%>
+											<option value="<%=j%>"><%=j%><%=postfix%> Semester</option>
+										<%}%>
+								<%}%>
+							</select>
+						</div>
+						<% if(i>1){%>	
+						<input class="deleteButton btn btn-xs btn-danger" type="button" value="Delete" >
 						<%}%>
-				<%}%>
-			</select>
-			<input class="deleteButton" type="button" value="Delete" >
-		</div> 
-	<% });%>
+					</div> 
+				<% });%>
 
-	<div class="addButton" >
-		<input type="button"  value="Add subject">
+				<div class="addButton form-group" >
+					<input class="btn btn-success btn-sm btn-block" type="button" value="Add subject">
+				</div>
+				<div class="form-group">
+					<input class="btn btn-primary btn-lg btn-block" type="submit" value="submit">
+				</div>
+			</form>
+			<a href="/teacher"> Go Back</a>
+		</div>
 	</div>
-	<div>
-		<input type="submit" value="submit">
-	</div>
-</form>
+</div>
 
 
 <script type="text/javascript">
@@ -79,13 +90,21 @@
 
 	//add subjects input tag
 	$("form").on("click", ".addButton", function(event){
-		$(".addButton").before("<div> ");
-		$(".addButton").prev().append("<input type=\"text\" name=\"subject[subject"+p+"][subjectName]\" placeholder=\"subject\" onkeydown=\"upperCaseF(this)\" required=\"true\"> ");
-		$(".addButton").prev().append("<input type=\"text\" name=\"subject[subject"+p+"][subjectCode]\" placeholder=\"subject code\" onkeydown=\"upperCaseF(this)\" required=\"true\">");
+		// $(".addButton").before("<div> ");
+		// $(".addButton").prev().append("<input type=\"text\" name=\"subject[subject"+p+"][subjectName]\" placeholder=\"subject\" onkeydown=\"upperCaseF(this)\" required=\"true\"> ");
+		// $(".addButton").prev().append("<input type=\"text\" name=\"subject[subject"+p+"][subjectCode]\" placeholder=\"subject code\" onkeydown=\"upperCaseF(this)\" required=\"true\">");
 
-		$(".addButton").prev().append(" <select name=\"subject[subject"+p+"][semester]\" required=\"true\" >");
-		$(".addButton").prev().children("select").append("<option value=\"\">Select Semester</option>");
-		
+		// $(".addButton").prev().append(" <select name=\"subject[subject"+p+"][semester]\" required=\"true\" >");
+		// $(".addButton").prev().children("select").append("<option value=\"\">Select Semester</option>");
+		$(".addButton").before("<div class=\"form-inline space\"> ");
+		$(".addButton").prev().append("<div class=\"form-group\"> ");
+		$(".addButton").prev().children("div").last().append("<input class=\"form-control\" type=\"text\" name=\"subject[subject"+p+"][subjectName]\" placeholder=\"subject\" onkeydown=\"upperCaseF(this)\" required=\"true\">");
+		$(".addButton").prev().append("<div class=\"form-group\"> ");
+		$(".addButton").prev().children("div").last().append("<input class=\"form-control\" type=\"text\" name=\"subject[subject"+p+"][subjectCode]\" placeholder=\"subject code\" onkeydown=\"upperCaseF(this)\" required=\"true\"> ");
+		$(".addButton").prev().append("<div class=\"form-group form-group-sm\"> ");
+		$(".addButton").prev().children("div").last().append(" <select class=\"form-control\" name=\"subject[subject"+p+"][semester]\" required=\"true\" > ");
+		$(".addButton").prev().children("div").last().children("select").append("<option value=\"\">Select Semester</option> ");
+
 		for(var i=1; i<=8; i++){
 			
 			if(i===1) postfix = "st";
@@ -93,10 +112,10 @@
 			else if(i===3) postfix = "rd";
 			else postfix = "th";
 
-			$(".addButton").prev().children("select").append("<option value=\""+i+"\">"+i+postfix+" Semester</option>");
+			$(".addButton").prev().children("div").last().children("select").append("<option value=\""+i+"\">"+i+postfix+" Semester</option>");
 		}
 
-		$(".addButton").prev().append(" <input class=\"deleteButton\" type=\"button\" value=\"Delete\" >");
+		$(".addButton").prev().append(" <input class=\"deleteButton btn btn-xs btn-danger\" type=\"button\" value=\"Delete\" >");
 		p++;
 	});
 

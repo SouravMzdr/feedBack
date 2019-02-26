@@ -136,22 +136,25 @@ app.get("/teacher/:teacherId/edit", (req, res)=>{
 //edit teacher
 app.put("/teacher/:teacherId/", (req, res)=>{
 	var subject = req.body.subject;
+	console.log(subject);
 	Teacher.findByIdAndUpdate(req.params.teacherId, req.body.teacher, function(err, teacher){
 		if(err){
 			res.redirect("back");
 		}else{
-
+			teacher.subjects.splice(0, teacher.subjects.length);
 			Object.entries(subject).forEach(([key, value]) =>{
+
 				Subject.create(value, function(err, insertingSubject){
-					if(err){
-						Subject.findOne({subjectCode : value.subjectCode},function(err, sub){
-							if(err){
-								console.log(err);
-							}else{
-								teacher.subjects.push(sub);	
-							}
-						});
-					}
+				 	if(err){
+					Subject.findOne({subjectCode : value.subjectCode},function(err, sub){
+				 			if(err){
+				 				console.log(err);
+				 			}else{
+				 				console.log(sub);
+				 				teacher.subjects.push(sub);	
+				 			}
+				 		});
+				 	}
 					else{
 						teacher.subjects.push(insertingSubject);
 					}	
@@ -179,7 +182,6 @@ app.delete("/teacher/:teacherId/",function(req, res){
 		}
 	});
 });
-
 
 
 //start server

@@ -1,37 +1,65 @@
 <%include ./partials/header.ejs%>
 
-<h1>Teacher's Page</h1>
-<div>
-	<a href="/teacher/new" class="btn btn-xs btn-primary">Add new teacher</a>
-	<% if(Object.keys(teacher).length>0){%>
-		<form id="delete" action="/teacher/delete?_method=DELETE" method="POST">
-			<input value="Delete All Teacher" class="btn btn-xs btn-danger" onClick="confirmation()">
-		</form>
-	<%}%>
-</div>
-<ul>
-	<% teacher.forEach((teacher)=>{%>
-		<li>
-		<img src="<%=teacher.image%>"><br>
-		<a href="#"><h1><%=teacher.name%></h1></a>
-		<h3><%=teacher.branch %></h3>
-		<h4>Teaches</h4>
-		<%teacher.subjects.forEach((subject)=>{%>
-			<li><%=subject.subjectName%> - <%=subject.semester%> sem</li>
-		<%}); %>
-		
+<div class="container">
+<header class="jumbotron">
 		<div>
-			<a class="btn btn-xs btn-warning" 
-			href="/teacher/<%=teacher._id %>/edit">
-				Edit
-			</a>
-			<form id="delete-form" action="/teacher/<%=teacher._id%>?_method=DELETE" method="POST">
-				<button id="del" class="btn btn-xs btn-danger">Delete</button>
-			</form>
+			<h1>Welcome to Teacher's Page</h1>
+			<p>All registered teachers are shown.</p>
+			<div class="form-inline">
+				<div class="form-group">
+					<a href="/teacher/new" class="btn btn btn-primary ">Add new teacher</a>		
+				</div>
+				<div class="form-group">
+					<% if(Object.keys(teacher).length>0){%>
+						<form id="delete" action="/teacher/delete?_method=DELETE" method="POST">
+							<input value="Delete All Teachers" class="btn btn btn-danger size" onClick="confirmation()">
+						</form>
+					<%}%>		
+				</div>
+			</div>
 		</div>
-		</li>
+</header>
+
+<div class="row text-center" style="display:flex; flex-wrap:wrap;"> 
+
+	<% teacher.forEach((teacher)=>{%>
+		<div class="col-md-4 col-sm-6">
+			<div class="thumbnail">
+				<img src="<%=teacher.image%>">
+				<div class="caption">
+					<a href="#"><h1><%=teacher.name%></h1></a>
+					<div class="panel panel-success">
+						<div class="panel-heading"><%=teacher.branch %></div>
+						<ul class="list-group">
+							<%teacher.subjects.forEach((subject)=>{%>
+							<li class="list-group-item"><strong><%=subject.subjectName%></strong>   -   <%=subject.semester%> sem</li>
+							<%}); %>
+						</ul>
+						<div class="panel-footer">
+							<div class="btn-group btn-group-justified" role="group" aria-label="...">
+							  <div class="btn-group" role="group" style="float:left; width:45%">
+							  	<a class="btn btn-xs btn-warning btn-group btn-group-sm" role="group"
+								href="/teacher/<%=teacher._id %>/edit">
+									Edit
+								</a>
+							  </div>
+							  <div class="btn-group" role="group" style="float:right; width:45%">
+							  	<form id="delete-form" action="/teacher/<%=teacher._id%>?_method=DELETE" method="POST">
+									<button id="del" role="group" class="btn btn-xs btn-danger btn-group btn-group-sm">Delete</button>
+								</form>
+							  </div>
+							</div>
+
+
+									
+								
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>		
 	<%})%>
-</ul>
+</div>
 
 <script type="text/javascript">
 	function confirmation(){
@@ -41,7 +69,7 @@
 		}else{
 			return;
 		}
-
+	}
 </script>
 
 <%include ./partials/footer.ejs%>
